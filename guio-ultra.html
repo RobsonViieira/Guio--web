@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#03050d"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
 <title>GUIO — Presença é Poder</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -27,7 +27,7 @@
   --muted2:#7b8db0;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:#000}
+html,body{height:100%;overflow:hidden;background:#000;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;}
 body{display:flex;justify-content:center;align-items:center;font-family:'DM Sans',sans-serif}
 
 /* PHONE */
@@ -281,7 +281,7 @@ body{display:flex;justify-content:center;align-items:center;font-family:'DM Sans
 .tab-icon{font-size:14px}
 
 /* TAB CONTENT */
-.tab-content{display:none;flex:1;overflow-y:auto;overflow-x:hidden}
+.tab-content{display:none;flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 .tab-content::-webkit-scrollbar{display:none}
 .tab-content.active{display:block}
 
@@ -636,11 +636,13 @@ body{display:flex;justify-content:center;align-items:center;font-family:'DM Sans
 
 /* BOTTOM NAV */
 .bottom-nav{
-  position:absolute;bottom:0;left:0;right:0;height:82px;
+  position:absolute;bottom:0;left:0;right:0;
+  height:calc(82px + env(safe-area-inset-bottom));
   background:rgba(3,5,13,0.95);
   backdrop-filter:blur(24px);
   border-top:0.5px solid var(--b);
-  display:flex;align-items:center;padding-bottom:14px;
+  display:flex;align-items:center;
+  padding-bottom:calc(14px + env(safe-area-inset-bottom));
   z-index:10;
 }
 .nav-item{
