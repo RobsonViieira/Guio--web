@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#03050d"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>GUIO — Presença é Poder</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#03050d;
+  --s1:#080c18;
+  --s2:#0d1225;
+  --s3:#121830;
+  --b:#1e2845;
+  --blue:#2563eb;
+  --blue2:#3b82f6;
+  --blue3:#60a5fa;
+  --blue4:#93c5fd;
+  --blue5:#bfdbfe;
+  --glow:rgba(37,99,235,0.4);
+  --glow2:rgba(59,130,246,0.15);
+  --purple:#7c3aed;
+  --green:#059669;
+  --amber:#d97706;
+  --text:#f0f4ff;
+  --muted:#4a5880;
+  --muted2:#7b8db0;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#000;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;}
+body{display:flex;justify-content:center;align-items:center;font-family:'DM Sans',sans-serif}
+
+/* PHONE */
+.phone{
+  width:375px;height:812px;
+  background:var(--bg);
+  border-radius:44px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,0.15),
+    0 0 60px rgba(37,99,235,0.12),
+    0 0 120px rgba(37,99,235,0.06),
+    0 40px 80px rgba(0,0,0,0.8);
+}
+
+/* CANVAS PARTÍCULAS */
+#particles{position:absolute;inset:0;z-index:0;pointer-events:none}
+
+/* STATUS */
+.status{
+  height:44px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 24px;
+  position:relative;z-index:10;
+}
+.status-time{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--text)}
+.status-r{display:flex;gap:5px;align-items:center;font-size:11px;color:var(--muted2)}
+
+/* SCREENS */
+.screen{position:absolute;inset:0;display:none;overflow:hidden;flex-direction:column}
+.screen.active{display:flex}
+
+/* ══ LOGIN ══ */
+#s-login{background:var(--bg);overflow:hidden}
+.login-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(37,99,235,0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,58,237,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 70%, rgba(37,99,235,0.08) 0%, transparent 50%);
+}
+.login-content{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;
+  align-items:center;
+  flex:1;padding:60px 28px 40px;
+}
+.login-badge{
+  background:rgba(37,99,235,0.1);
+  border:1px solid rgba(59,130,246,0.2);
+  border-radius:100px;
+  padding:6px 16px;
+  font-size:11px;font-weight:600;
+  color:var(--blue3);
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:32px;
+  display:flex;align-items:center;gap:8px;
+}
+.login-badge-dot{
+  width:6px;height:6px;
+  background:var(--blue2);
+  border-radius:50%;
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+.login-logo{
+  font-family:'Syne',sans-serif;
+  font-size:72px;font-weight:800;
+  letter-spacing:-4px;
+  line-height:1;
+  margin-bottom:8px;
+  background:linear-gradient(135deg,#fff 0%,var(--blue3) 50%,var(--blue2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:logoGlow 4s ease-in-out infinite;
+}
+@keyframes logoGlow{
+  0%,100%{filter:drop-shadow(0 0 20px rgba(59,130,246,0.3))}
+  50%{filter:drop-shadow(0 0 40px rgba(59,130,246,0.6))}
+}
+.login-tagline{
+  font-size:13px;color:var(--muted2);
+  letter-spacing:3px;text-transform:uppercase;
+  font-weight:500;margin-bottom:48px;
+}
+.login-tagline span{color:var(--blue3)}
+
+/* RADAR ANIMADO */
+.radar-wrap{
+  width:180px;height:180px;
+  position:relative;margin-bottom:48px;
+}
+.radar-circle{
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(59,130,246,0.15);
+}
+.radar-c1{inset:0}
+.radar-c2{inset:20px}
+.radar-c3{inset:40px}
+.radar-c4{inset:60px}
+.radar-sweep{
+  position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg, transparent 0%, rgba(37,99,235,0.4) 15%, transparent 20%);
+  animation:sweep 3s linear infinite;
+}
+@keyframes sweep{to{transform:rotate(360deg)}}
+.radar-center{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:16px;height:16px;
+  background:var(--blue2);
+  border-radius:50%;
+  box-shadow:0 0 20px var(--blue2),0 0 40px rgba(59,130,246,0.4);
+}
+.radar-ping{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:16px;height:16px;
+  border-radius:50%;
+  border:2px solid var(--blue2);
+  animation:ping 3s ease-out infinite;
+}
+@keyframes ping{
+  0%{width:16px;height:16px;opacity:1}
+  100%{width:160px;height:160px;opacity:0}
+}
+.radar-dot{
+  position:absolute;
+  width:8px;height:8px;
+  background:var(--blue3);
+  border-radius:50%;
+  box-shadow:0 0 8px var(--blue3);
+}
+.radar-dot:nth-child(1){top:30px;left:120px;animation:dotPulse 2s 0s infinite}
+.radar-dot:nth-child(2){top:100px;left:140px;animation:dotPulse 2s 0.5s infinite}
+.radar-dot:nth-child(3){top:130px;left:50px;animation:dotPulse 2s 1s infinite}
+@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.6)}}
+
+/* BOTÕES LOGIN */
+.login-cta{width:100%;margin-bottom:12px}
+.btn-primary{
+  width:100%;padding:16px;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue2) 100%);
+  border:none;border-radius:16px;
+  color:#fff;font-size:16px;font-weight:700;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  position:relative;overflow:hidden;
+  transition:transform 0.2s,box-shadow 0.2s;
+  box-shadow:0 4px 24px rgba(37,99,235,0.4);
+}
+.btn-primary::before{
+  content:'';position:absolute;
+  top:-50%;left:-50%;width:200%;height:200%;
+  background:linear-gradient(transparent,rgba(255,255,255,0.08),transparent);
+  transform:rotate(45deg) translateX(-100%);
+  animation:shine 4s ease-in-out infinite;
+}
+@keyframes shine{0%,100%{transform:rotate(45deg) translateX(-100%)}50%{transform:rotate(45deg) translateX(100%)}}
+.btn-primary:active{transform:scale(0.97)}
+.btn-ghost{
+  width:100%;padding:14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;color:var(--muted2);
+  font-size:14px;font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-ghost:active{background:rgba(255,255,255,0.08)}
+
+.login-divider{
+  display:flex;align-items:center;gap:12px;
+  margin:16px 0;width:100%;
+}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:0.5px;background:var(--b)}
+.login-divider span{font-size:11px;color:var(--muted);font-weight:500}
+
+.social-login{display:flex;gap:10px;width:100%}
+.social-btn{
+  flex:1;padding:12px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-size:13px;color:var(--muted2);font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+}
+
+/* ══ HOME (3 TABS) ══ */
+#s-home{background:var(--bg);flex-direction:column}
+.home-header{
+  padding:12px 20px 0;
+  position:sticky;top:0;z-index:5;
+  background:rgba(3,5,13,0.92);
+  backdrop-filter:blur(24px);
+}
+.home-top{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+.home-logo{
+  font-family:'Syne',sans-serif;
+  font-size:24px;font-weight:800;
+  letter-spacing:-1px;
+  background:linear-gradient(135deg,#fff,var(--blue3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.home-actions{display:flex;gap:10px}
+.icon-btn{
+  width:36px;height:36px;border-radius:12px;
+  background:var(--s2);border:0.5px solid var(--b);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;position:relative;
+}
+.badge-dot{
+  width:7px;height:7px;background:var(--blue2);
+  border-radius:50%;position:absolute;
+  top:5px;right:5px;border:1.5px solid var(--bg);
+}
+
+/* TAB SWITCHER */
+.tab-switcher{
+  display:flex;gap:2px;
+  background:var(--s1);
+  border-radius:14px;padding:3px;
+  border:0.5px solid var(--b);
+  margin-bottom:12px;
+}
+.tab-btn{
+  flex:1;padding:9px 8px;
+  border-radius:11px;
+  font-size:12px;font-weight:600;
+  color:var(--muted);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:all 0.25s;border:none;
+  background:transparent;font-family:'DM Sans',sans-serif;
+}
+.tab-btn.active{
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  color:#fff;
+  box-shadow:0 2px 12px rgba(37,99,235,0.4);
+}
+.tab-icon{font-size:14px}
+
+/* TAB CONTENT */
+.tab-content{display:none;flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+.tab-content::-webkit-scrollbar{display:none}
+.tab-content.active{display:block}
+
+/* ── MISSÕES TAB ── */
+.gps-pill{
+  margin:0 16px 14px;
+  background:rgba(37,99,235,0.08);
+  border:0.5px solid rgba(59,130,246,0.2);
+  border-radius:12px;padding:10px 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.gps-pulse{
+  width:8px;height:8px;background:var(--blue2);
+  border-radius:50%;flex-shrink:0;
+  animation:gpsPulse 2s ease-in-out infinite;
+}
+@keyframes gpsPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,0.5)}
+  50%{box-shadow:0 0 0 8px rgba(59,130,246,0)}
+}
+.gps-text{font-size:12px;color:var(--blue3);flex:1;font-weight:500}
+.gps-live{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace}
+
+/* SURPRISE CARD */
+.surprise-card{
+  margin:0 16px 16px;
+  background:linear-gradient(135deg,rgba(37,99,235,0.12),rgba(124,58,237,0.08));
+  border:1px solid rgba(59,130,246,0.2);
+  border-radius:20px;padding:18px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;position:relative;overflow:hidden;
+}
+.surprise-card::before{
+  content:'';position:absolute;
+  top:-30px;right:-30px;
+  width:100px;height:100px;
+  background:radial-gradient(circle,rgba(59,130,246,0.15),transparent 70%);
+}
+.surprise-ico{
+  width:52px;height:52px;border-radius:16px;
+  background:rgba(37,99,235,0.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;
+  animation:floatAnim 3s ease-in-out infinite;
+}
+@keyframes floatAnim{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.surprise-info{flex:1}
+.surprise-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px}
+.surprise-sub{font-size:12px;color:var(--blue4)}
+.surprise-arrow{
+  width:32px;height:32px;border-radius:10px;
+  background:rgba(59,130,246,0.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--blue3);
+}
+
+/* MISSÃO DESTAQUE */
+.mission-featured{
+  margin:0 16px 14px;
+  border-radius:20px;overflow:hidden;
+  border:1px solid rgba(59,130,246,0.15);
+  cursor:pointer;
+}
+.mf-img{
+  height:130px;
+  background:linear-gradient(135deg,#0a1628,#102040);
+  display:flex;align-items:center;justify-content:center;
+  font-size:56px;position:relative;
+}
+.mf-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(8,12,24,1),transparent 55%);
+}
+.mf-overlay{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:12px 16px;z-index:1;
+}
+.mf-title{font-size:16px;font-weight:700;color:#fff}
+.mf-business{font-size:11px;color:rgba(255,255,255,0.55);margin-top:2px}
+.mf-body{
+  background:var(--s1);padding:14px 16px;
+  display:flex;align-items:center;gap:8px;
+}
+.pill{padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700}
+.pill-b{background:rgba(59,130,246,0.12);color:var(--blue3);border:0.5px solid rgba(59,130,246,0.2)}
+.pill-p{background:rgba(124,58,237,0.12);color:#a78bfa;border:0.5px solid rgba(124,58,237,0.2)}
+.pill-g{background:rgba(5,150,105,0.12);color:#34d399;border:0.5px solid rgba(5,150,105,0.2)}
+.mf-dist{font-size:11px;color:var(--muted);margin-left:auto}
+
+/* LISTA MISSÕES */
+.missions-list{padding:0 16px;display:flex;flex-direction:column;gap:10px;padding-bottom:20px}
+.mr{
+  background:var(--s1);border:0.5px solid var(--b);
+  border-radius:16px;padding:12px 14px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;
+  position:relative;overflow:hidden;
+}
+.mr::before{
+  content:'';position:absolute;
+  left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--blue),var(--purple));
+  opacity:0;transition:opacity 0.2s;
+}
+.mr:active::before{opacity:1}
+.mr-ico{
+  width:44px;height:44px;border-radius:14px;
+  background:var(--s2);display:flex;align-items:center;
+  justify-content:center;font-size:20px;flex-shrink:0;
+  border:0.5px solid var(--b);
+}
+.mr-info{flex:1}
+.mr-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.mr-biz{font-size:11px;color:var(--muted2)}
+.mr-right{text-align:right}
+.mr-reward{font-size:12px;color:var(--blue3);font-weight:700}
+.mr-dist{font-size:10px;color:var(--muted);margin-top:2px;font-family:'Space Mono',monospace}
+
+/* ── CONEXÕES TAB ── */
+.stories-row{
+  display:flex;gap:14px;padding:4px 16px 16px;
+  overflow-x:auto;
+}
+.stories-row::-webkit-scrollbar{display:none}
+.story-item{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;cursor:pointer}
+.story-ring{
+  width:60px;height:60px;border-radius:50%;
+  padding:2.5px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  position:relative;
+}
+.story-ring.seen{background:var(--b)}
+.story-av{
+  width:100%;height:100%;border-radius:50%;
+  border:2px solid var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:#fff;
+}
+.story-loc{
+  position:absolute;bottom:-2px;right:-2px;
+  background:var(--blue2);border-radius:50%;
+  width:18px;height:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;border:2px solid var(--bg);
+}
+.story-name{font-size:10px;color:var(--muted2);font-weight:600}
+.story-name.new{color:var(--text)}
+
+/* FEED POSTS */
+.feed-posts{padding:0 16px;display:flex;flex-direction:column;gap:14px;padding-bottom:20px}
+.post{
+  background:var(--s1);border:0.5px solid var(--b);
+  border-radius:20px;overflow:hidden;
+  animation:fadeUp 0.4s ease forwards;
+  opacity:0;transform:translateY(12px);
+}
+.post:nth-child(1){animation-delay:0.05s}
+.post:nth-child(2){animation-delay:0.1s}
+.post:nth-child(3){animation-delay:0.15s}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.post-head{
+  padding:14px 16px 10px;
+  display:flex;align-items:center;gap:10px;
+}
+.post-av{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#fff;flex-shrink:0;
+}
+.post-user{flex:1}
+.post-name{font-size:14px;font-weight:700;color:var(--text)}
+.post-meta{font-size:11px;color:var(--muted);margin-top:1px}
+.post-badge{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700}
+.pb-v{background:rgba(5,150,105,0.12);color:#34d399;border:0.5px solid rgba(5,150,105,0.2)}
+.pb-d{background:rgba(124,58,237,0.12);color:#a78bfa;border:0.5px solid rgba(124,58,237,0.2)}
+.pb-s{background:rgba(217,119,6,0.12);color:#fbbf24;border:0.5px solid rgba(217,119,6,0.2)}
+.post-img{
+  margin:0 14px 10px;border-radius:14px;
+  overflow:hidden;position:relative;
+  height:150px;display:flex;align-items:center;justify-content:center;
+  border:0.5px solid var(--b);
+}
+.post-img-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;font-size:60px;
+}
+.post-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(3,5,13,0.95),transparent 50%);
+}
+.post-img-info{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:10px 14px;z-index:1;
+}
+.post-place-name{font-size:14px;font-weight:700;color:#fff}
+.post-place-addr{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px}
+.post-place-meta{
+  padding:8px 14px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.post-reward-txt{font-size:12px;color:#34d399;font-weight:700}
+.post-dist-txt{font-size:11px;color:var(--muted)}
+.post-caption{
+  padding:0 16px 10px;font-size:13px;
+  color:var(--muted2);line-height:1.6;
+}
+.post-caption strong{color:var(--blue3);font-weight:600}
+.post-actions{
+  padding:10px 16px 14px;
+  display:flex;align-items:center;gap:16px;
+  border-top:0.5px solid var(--b);
+}
+.act{
+  display:flex;align-items:center;gap:5px;
+  font-size:12px;color:var(--muted2);cursor:pointer;
+  background:none;border:none;font-family:'DM Sans',sans-serif;
+  transition:color 0.15s;
+}
+.act:hover{color:var(--text)}
+.act.liked{color:#f43f5e}
+.act.saved{color:var(--amber)}
+.act-ml{margin-left:auto}
+
+/* ── CARTEIRA TAB ── */
+.wallet-wrap{padding:16px;padding-bottom:24px}
+
+/* CARD HOLOGRÁFICO */
+.holo-card{
+  width:100%;
+  aspect-ratio:1.586;
+  border-radius:20px;
+  position:relative;overflow:hidden;
+  margin-bottom:20px;
+  cursor:pointer;
+  box-shadow:0 8px 32px rgba(37,99,235,0.3),0 0 0 1px rgba(59,130,246,0.2);
+}
+.holo-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#0d1e3d 0%,#0a1628 40%,#091525 100%);
+}
+.holo-shine{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    125deg,
+    transparent 0%,
+    rgba(59,130,246,0.08) 30%,
+    rgba(147,197,253,0.12) 50%,
+    rgba(59,130,246,0.06) 70%,
+    transparent 100%
+  );
+  animation:holoShift 4s ease-in-out infinite;
+}
+@keyframes holoShift{
+  0%,100%{transform:translateX(-20%) rotate(-5deg)}
+  50%{transform:translateX(20%) rotate(5deg)}
+}
+.holo-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(59,130,246,0.05) 1px,transparent 1px);
+  background-size:20px 20px;
+}
+.holo-glow{
+  position:absolute;top:-40px;right:-40px;
+  width:160px;height:160px;
+  background:radial-gradient(circle,rgba(59,130,246,0.2),transparent 70%);
+}
+.holo-content{
+  position:relative;z-index:2;
+  padding:20px 22px;height:100%;
+  display:flex;flex-direction:column;
+}
+.holo-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:auto}
+.holo-brand{
+  font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
+  letter-spacing:-0.5px;color:#fff;
+}
+.holo-chip{
+  width:36px;height:28px;border-radius:6px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),rgba(255,255,255,0.05));
+  border:1px solid rgba(255,255,255,0.1);
+  display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:4px;
+}
+.holo-chip-cell{background:rgba(255,255,255,0.1);border-radius:2px}
+.holo-mid{margin-bottom:16px}
+.holo-balance-label{font-size:10px;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.holo-balance{
+  font-family:'Syne',sans-serif;font-size:32px;font-weight:800;
+  color:#fff;letter-spacing:-1px;
+  text-shadow:0 0 20px rgba(59,130,246,0.5);
+}
+.holo-bottom{display:flex;align-items:flex-end;justify-content:space-between}
+.holo-name{font-size:13px;color:rgba(255,255,255,0.7);font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.holo-number{font-family:'Space Mono',monospace;font-size:11px;color:rgba(255,255,255,0.3)}
+
+/* WALLET STATS */
+.wallet-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.wstat{
+  background:var(--s1);border:0.5px solid var(--b);
+  border-radius:16px;padding:16px;
+}
+.wstat-ico{font-size:20px;margin-bottom:8px;display:block}
+.wstat-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--blue3);letter-spacing:-0.5px}
+.wstat-label{font-size:11px;color:var(--muted);margin-top:2px;font-weight:500}
+
+/* WALLET TRANSACTIONS */
+.wallet-section-title{
+  font-size:10px;color:var(--muted);font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.tx-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.tx{
+  background:var(--s1);border:0.5px solid var(--b);
+  border-radius:14px;padding:12px 14px;
+  display:flex;align-items:center;gap:12px;
+}
+.tx-ico{
+  width:38px;height:38px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.tx-ico.earn{background:rgba(5,150,105,0.12)}
+.tx-ico.spend{background:rgba(239,68,68,0.1)}
+.tx-ico.bonus{background:rgba(37,99,235,0.12)}
+.tx-info{flex:1}
+.tx-name{font-size:13px;font-weight:600;color:var(--text)}
+.tx-date{font-size:10px;color:var(--muted);margin-top:2px;font-family:'Space Mono',monospace}
+.tx-val{font-size:14px;font-weight:800;font-family:'Syne',sans-serif}
+.tx-val.pos{color:#34d399}
+.tx-val.neg{color:#f87171}
+.tx-val.bon{color:var(--blue3)}
+
+/* FUTURE CARD */
+.future-card{
+  background:linear-gradient(135deg,rgba(37,99,235,0.06),rgba(124,58,237,0.04));
+  border:1px solid rgba(59,130,246,0.12);
+  border-radius:16px;padding:16px;
+  display:flex;align-items:center;gap:14px;
+}
+.future-ico{font-size:28px;flex-shrink:0}
+.future-info{flex:1}
+.future-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.future-sub{font-size:11px;color:var(--muted2);line-height:1.5}
+.future-badge{
+  background:rgba(37,99,235,0.1);border:0.5px solid rgba(59,130,246,0.2);
+  border-radius:100px;padding:4px 10px;
+  font-size:10px;font-weight:700;color:var(--blue3);
+  white-space:nowrap;
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:absolute;bottom:0;left:0;right:0;
+  height:calc(82px + env(safe-area-inset-bottom));
+  background:rgba(3,5,13,0.95);
+  backdrop-filter:blur(24px);
+  border-top:0.5px solid var(--b);
+  display:flex;align-items:center;
+  padding-bottom:calc(14px + env(safe-area-inset-bottom));
+  z-index:10;
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:4px;cursor:pointer;padding:8px 0;
+}
+.nav-ico{
+  width:36px;height:36px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;transition:all 0.2s;
+}
+.nav-ico.active{
+  background:linear-gradient(135deg,rgba(37,99,235,0.2),rgba(59,130,246,0.1));
+  box-shadow:0 0 12px rgba(37,99,235,0.3);
+}
+.nav-lbl{font-size:10px;color:var(--muted);font-weight:600;transition:color 0.2s}
+.nav-lbl.active{color:var(--blue3)}
+
+/* STORY OVERLAY */
+.story-overlay{
+  position:absolute;inset:0;background:#000;
+  z-index:100;display:none;flex-direction:column;
+}
+.story-overlay.open{display:flex}
+.story-prog-row{display:flex;gap:4px;padding:12px 16px 8px}
+.story-prog-bar{flex:1;height:2px;background:rgba(255,255,255,0.2);border-radius:1px;overflow:hidden}
+.story-prog-fill{height:100%;background:#fff;border-radius:1px;width:0;transition:width 5s linear}
+.story-prog-fill.done{width:100%}
+.story-top-row{display:flex;align-items:center;gap:10px;padding:6px 16px 12px}
+.story-uav{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.story-uname{font-size:14px;font-weight:700;color:#fff;flex:1}
+.story-utime{font-size:11px;color:rgba(255,255,255,0.5)}
+.story-x{font-size:20px;color:#fff;cursor:pointer;padding:4px}
+.story-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px}
+.story-emoji{font-size:90px}
+.story-tag{
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(10px);border-radius:100px;
+  padding:8px 20px;font-size:14px;color:#fff;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+}
+.story-cap{text-align:center;font-size:15px;color:rgba(255,255,255,0.8);line-height:1.6;max-width:280px}
+.story-ver{
+  background:rgba(5,150,105,0.2);border:1px solid rgba(5,150,105,0.3);
+  border-radius:100px;padding:6px 16px;font-size:12px;color:#34d399;font-weight:600;
+}
+.story-footer{padding:16px;display:flex;gap:10px}
+.story-input{
+  flex:1;background:rgba(255,255,255,0.08);border-radius:100px;
+  padding:12px 18px;font-size:13px;color:rgba(255,255,255,0.5);
+  border:0.5px solid rgba(255,255,255,0.1);
+}
+.story-share-btn{
+  width:46px;height:46px;background:rgba(255,255,255,0.08);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:18px;cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="phone">
+<canvas id="particles"></canvas>
+
+<!-- STATUS -->
+<div class="status">
+  <span class="status-time">21:34</span>
+  <div style="position:absolute;left:50%;transform:translateX(-50%);width:80px;height:4px;background:#1a1f2e;border-radius:2px"></div>
+  <div class="status-r"><span>●●●</span><span>5G</span><span style="font-size:14px">🔋</span></div>
+</div>
+
+<!-- ══ LOGIN ══ -->
+<div class="screen active" id="s-login">
+  <div class="login-bg"></div>
+  <div class="login-content">
+    <div class="login-badge"><div class="login-badge-dot"></div>Itatiba · SP · Brasil</div>
+    <div class="login-logo">GUIO</div>
+    <div class="login-tagline">Presença é <span>Poder</span></div>
+
+    <div class="radar-wrap">
+      <div class="radar-circle radar-c1"></div>
+      <div class="radar-circle radar-c2"></div>
+      <div class="radar-circle radar-c3"></div>
+      <div class="radar-circle radar-c4"></div>
+      <div class="radar-sweep"></div>
+      <div class="radar-center"></div>
+      <div class="radar-ping"></div>
+      <div class="radar-dot"></div>
+      <div class="radar-dot"></div>
+      <div class="radar-dot"></div>
+    </div>
+
+    <div class="login-cta">
+      <button class="btn-primary" style="margin-bottom:10px">
+        <span style="font-size:18px">⚡</span> Entrar com email
+      </button>
+      <div class="login-divider"><span>ou continue com</span></div>
+      <div class="social-login">
+        <button class="social-btn"><span>🇬</span> Google</button>
+        <button class="social-btn"><span>📱</span> Apple</button>
+      </div>
+      <button class="btn-ghost" style="margin-top:10px">Criar conta grátis →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOME ══ -->
+<div class="screen" id="s-home">
+  <div class="home-header">
+    <div class="home-top">
+      <div class="home-logo">GUIO</div>
+      <div class="home-actions">
+        <div class="icon-btn">🔔<div class="badge-dot"></div></div>
+        <div class="icon-btn">✉️</div>
+      </div>
+    </div>
+    <div class="tab-switcher">
+      <button class="tab-btn active" id="tb-missions"><span class="tab-icon">⚡</span>Missões</button>
+      <button class="tab-btn" id="tb-social"><span class="tab-icon">👥</span>Conexões</button>
+      <button class="tab-btn" id="tb-wallet"><span class="tab-icon">💳</span>Carteira</button>
+    </div>
+  </div>
+
+  <!-- MISSÕES -->
+  <div class="tab-content active" id="tc-missions">
+    <div class="gps-pill">
+      <div class="gps-pulse"></div>
+      <span class="gps-text">GPS ativo · Centro de Itatiba</span>
+      <span class="gps-live">↻ LIVE</span>
+    </div>
+    <div class="surprise-card">
+      <div class="surprise-ico">🎁</div>
+      <div class="surprise-info">
+        <div class="surprise-title">Missão Surpresa</div>
+        <div class="surprise-sub">Algo especial a 180m · toque para revelar</div>
+      </div>
+      <div class="surprise-arrow">→</div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:0 20px;margin-bottom:10px">Em destaque</div>
+    <div class="mission-featured">
+      <div class="mf-img">☕<div class="mf-img::after"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,12,24,1),transparent 55%)"></div>
+        <div class="mf-overlay">
+          <div class="mf-title">Traga um Amigo</div>
+          <div class="mf-business">Café do Centro · Itatiba</div>
+        </div>
+      </div>
+      <div class="mf-body">
+        <span class="pill pill-b">☕ café grátis</span>
+        <span class="pill pill-p">👥 dupla</span>
+        <span class="mf-dist">120m</span>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:0 20px;margin-bottom:10px">Perto de você</div>
+    <div class="missions-list">
+      <div class="mr"><div class="mr-ico">🍕</div><div class="mr-info"><div class="mr-name">Almoço Especial</div><div class="mr-biz">Pizzaria Bella · Itatiba</div></div><div class="mr-right"><div class="mr-reward">10% off</div><div class="mr-dist">340m</div></div></div>
+      <div class="mr"><div class="mr-ico">💈</div><div class="mr-info"><div class="mr-name">Check-in Express</div><div class="mr-biz">Barbearia do Zé</div></div><div class="mr-right"><div class="mr-reward">+200 pts</div><div class="mr-dist">580m</div></div></div>
+      <div class="mr"><div class="mr-ico">🏋️</div><div class="mr-info"><div class="mr-name">Check-in Academia</div><div class="mr-biz">FitClub Itatiba</div></div><div class="mr-right"><div class="mr-reward">brinde</div><div class="mr-dist">820m</div></div></div>
+      <div class="mr"><div class="mr-ico">🛒</div><div class="mr-info"><div class="mr-name">5ª Visita = Brinde</div><div class="mr-biz">Mercado Central</div></div><div class="mr-right"><div class="mr-reward">fidelidade</div><div class="mr-dist">950m</div></div></div>
+    </div>
+  </div>
+
+  <!-- CONEXÕES -->
+  <div class="tab-content" id="tc-social">
+    <div class="stories-row">
+      <div class="story-item">
+        <div class="story-ring"><div class="story-av" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6)">RV<div class="story-loc">+</div></div></div>
+        <span class="story-name new">Você</span>
+      </div>
+      <div class="story-item">
+        <div class="story-ring"><div class="story-av" style="background:linear-gradient(135deg,#4c1d95,#7c3aed)">AM<div class="story-loc">📍</div></div></div>
+        <span class="story-name new">Ana</span>
+      </div>
+      <div class="story-item">
+        <div class="story-ring"><div class="story-av" style="background:linear-gradient(135deg,#92400e,#d97706)">CS<div class="story-loc">📍</div></div></div>
+        <span class="story-name new">Carlos</span>
+      </div>
+      <div class="story-item">
+        <div class="story-ring seen"><div class="story-av" style="background:linear-gradient(135deg,#065f46,#059669)">JL</div></div>
+        <span class="story-name">Julia</span>
+      </div>
+      <div class="story-item">
+        <div class="story-ring seen"><div class="story-av" style="background:linear-gradient(135deg,#881337,#e11d48)">PT</div></div>
+        <span class="story-name">Pedro</span>
+      </div>
+    </div>
+    <div class="feed-posts">
+      <div class="post">
+        <div class="post-head">
+          <div class="post-av" style="background:linear-gradient(135deg,#4c1d95,#7c3aed)">AM</div>
+          <div class="post-user"><div class="post-name">Ana Martins</div><div class="post-meta">agora · Itatiba, SP</div></div>
+          <span class="post-badge pb-d">👥 dupla</span>
+        </div>
+        <div class="post-img" style="background:linear-gradient(135deg,#0a1628,#102040)">
+          <div class="post-img-bg">☕</div>
+          <div class="post-img-overlay"></div>
+          <div class="post-img-info"><div class="post-place-name">Café do Centro</div><div class="post-place-addr">Rua XV de Novembro, 42 · Itatiba</div></div>
+        </div>
+        <div class="post-place-meta"><span class="post-reward-txt">☕ café grátis resgatado</span><span class="post-dist-txt">120m daqui</span></div>
+        <div class="post-caption">Missão <strong>Traga um Amigo</strong> completa com o Carlos! Café incrível 🔥</div>
+        <div class="post-actions">
+          <button class="act">❤️ 24</button>
+          <button class="act">💬 3</button>
+          <button class="act">🔗</button>
+          <button class="act saved act-ml">🔖</button>
+        </div>
+      </div>
+      <div class="post">
+        <div class="post-head">
+          <div class="post-av" style="background:linear-gradient(135deg,#065f46,#059669)">JL</div>
+          <div class="post-user"><div class="post-name">Julia Lima</div><div class="post-meta">18 min · Itatiba, SP</div></div>
+          <span class="post-badge pb-v">✓ verificado</span>
+        </div>
+        <div class="post-img" style="background:linear-gradient(135deg,#1a0500,#3d1500)">
+          <div class="post-img-bg">💈</div>
+          <div class="post-img-overlay"></div>
+          <div class="post-img-info"><div class="post-place-name">Barbearia do Zé</div><div class="post-place-addr">Av. São João, 156 · Itatiba</div></div>
+        </div>
+        <div class="post-place-meta"><span class="post-reward-txt">+200 pts GUIO</span><span class="post-dist-txt">580m daqui</span></div>
+        <div class="post-caption">Missão <strong>Check-in Express</strong> feita! Melhor barbearia ✂️</div>
+        <div class="post-actions">
+          <button class="act">🤍 11</button>
+          <button class="act">💬 1</button>
+          <button class="act">🔗</button>
+          <button class="act act-ml">🔖</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARTEIRA -->
+  <div class="tab-content" id="tc-wallet">
+    <div class="wallet-wrap">
+      <!-- CARD HOLOGRÁFICO -->
+      <div class="holo-card">
+        <div class="holo-bg"></div>
+        <div class="holo-grid"></div>
+        <div class="holo-shine"></div>
+        <div class="holo-glow"></div>
+        <div class="holo-content">
+          <div class="holo-top">
+            <div class="holo-brand">GUIO</div>
+            <div class="holo-chip">
+              <div class="holo-chip-cell"></div>
+              <div class="holo-chip-cell"></div>
+              <div class="holo-chip-cell"></div>
+              <div class="holo-chip-cell"></div>
+            </div>
+          </div>
+          <div class="holo-mid">
+            <div class="holo-balance-label">Pontos GUIO</div>
+            <div class="holo-balance">1.240</div>
+          </div>
+          <div class="holo-bottom">
+            <div class="holo-name">Robson V.</div>
+            <div class="holo-number">•••• •••• 2024</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wallet-stats">
+        <div class="wstat"><span class="wstat-ico">🎁</span><div class="wstat-val">8</div><div class="wstat-label">Vouchers ativos</div></div>
+        <div class="wstat"><span class="wstat-ico">⭐</span><div class="wstat-val">47</div><div class="wstat-label">Missões completas</div></div>
+        <div class="wstat"><span class="wstat-ico">👥</span><div class="wstat-val">12</div><div class="wstat-label">Duplas verificadas</div></div>
+        <div class="wstat"><span class="wstat-ico">🏆</span><div class="wstat-val">#3</div><div class="wstat-label">Ranking Itatiba</div></div>
+      </div>
+
+      <div class="wallet-section-title">Histórico</div>
+      <div class="tx-list">
+        <div class="tx"><div class="tx-ico earn">☕</div><div class="tx-info"><div class="tx-name">Café do Centro</div><div class="tx-date">hoje · 09:41</div></div><div class="tx-val pos">+150</div></div>
+        <div class="tx"><div class="tx-ico spend">🎁</div><div class="tx-info"><div class="tx-name">Voucher resgatado</div><div class="tx-date">ontem · 14:22</div></div><div class="tx-val neg">-80</div></div>
+        <div class="tx"><div class="tx-ico bonus">👥</div><div class="tx-info"><div class="tx-name">Bônus dupla</div><div class="tx-date">01/04 · 18:30</div></div><div class="tx-val bon">+200</div></div>
+        <div class="tx"><div class="tx-ico earn">💈</div><div class="tx-info"><div class="tx-name">Barbearia do Zé</div><div class="tx-date">31/03 · 11:15</div></div><div class="tx-val pos">+200</div></div>
+      </div>
+
+      <div class="wallet-section-title">Em breve</div>
+      <div class="future-card">
+        <div class="future-ico">💳</div>
+        <div class="future-info">
+          <div class="future-title">GUIO Pay</div>
+          <div class="future-sub">Pague com seus pontos diretamente nos estabelecimentos parceiros.</div>
+        </div>
+        <div class="future-badge">v2.0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item">
+      <div class="nav-ico">🏠</div>
+      <span class="nav-lbl">Início</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-ico active">⚡</div>
+      <span class="nav-lbl active">Missões</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-ico">◎</div>
+      <span class="nav-lbl">Mapa</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-ico">👤</div>
+      <span class="nav-lbl">Perfil</span>
+    </div>
+  </div>
+</div>
+
+<!-- STORY OVERLAY -->
+<div class="story-overlay" id="story-overlay">
+  <div class="story-prog-row">
+    <div class="story-prog-bar"><div class="story-prog-fill done"></div></div>
+    <div class="story-prog-bar"><div class="story-prog-fill" id="story-fill"></div></div>
+    <div class="story-prog-bar"></div>
+  </div>
+  <div class="story-top-row">
+    <div class="story-uav" style="background:linear-gradient(135deg,#4c1d95,#7c3aed)">AM</div>
+    <span class="story-uname">Ana Martins</span>
+    <span class="story-utime">agora</span>
+    <span class="story-x">✕</span>
+  </div>
+  <div class="story-body">
+    <div class="story-emoji">☕</div>
+    <div class="story-tag">📍 Café do Centro · Itatiba</div>
+    <div class="story-cap">Finalmente completei a missão Traga um Amigo com o Carlos! Café grátis é vida 🙌</div>
+    <div class="story-ver">✓ Presença verificada por GPS + QR</div>
+  </div>
+  <div class="story-footer">
+    <div class="story-input">Responder Ana...</div>
+    <div class="story-share-btn">↗</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// PARTÍCULAS
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = 375; canvas.height = 812;
+const particles = [];
+for(let i=0;i<60;i++){
+  particles.push({
+    x:Math.random()*375, y:Math.random()*812,
+    r:Math.random()*1.5+0.3,
+    vx:(Math.random()-0.5)*0.3,
+    vy:(Math.random()-0.5)*0.3,
+    a:Math.random()*0.4+0.1,
+  });
+}
+function animParticles(){
+  ctx.clearRect(0,0,375,812);
+  particles.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0)p.x=375; if(p.x>375)p.x=0;
+    if(p.y<0)p.y=812; if(p.y>812)p.y=0;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(59,130,246,${p.a})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+// NAVEGAÇÃO
+function goHome(){
+  document.getElementById('s-login').classList.remove('active');
+  document.getElementById('s-home').classList.add('active');
+}
+function goLogin(){
+  document.getElementById('s-home').classList.remove('active');
+  document.getElementById('s-login').classList.add('active');
+}
+
+function switchTab(tab){
+  ['missions','social','wallet'].forEach(t=>{
+    document.getElementById('tc-'+t).classList.toggle('active',t===tab);
+    document.getElementById('tb-'+t).classList.toggle('active',t===tab);
+  });
+}
+
+function openStory(){
+  document.getElementById('story-overlay').classList.add('open');
+  setTimeout(()=>{document.getElementById('story-fill').style.width='100%'},100);
+  setTimeout(closeStory,5300);
+}
+function closeStory(){
+  document.getElementById('story-overlay').classList.remove('open');
+  const f=document.getElementById('story-fill');
+  f.style.transition='none'; f.style.width='0%';
+  setTimeout(()=>{f.style.transition='width 5s linear'},100);
+}
+
+// CHIP FILTER
+document.querySelectorAll('.chip').forEach(c=>{
+  c.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════════
+// GUIO API — INTEGRAÇÃO REAL
+// ═══════════════════════════════════════════
+const API = '/api';
+let TOKEN = localStorage.getItem('guio_token') || null;
+let USER  = JSON.parse(localStorage.getItem('guio_user') || 'null');
+
+// Toast de notificação
+function toast(msg, tipo='info'){
+  let t = document.getElementById('guio-toast');
+  if(!t){ t = document.createElement('div'); t.id='guio-toast'; t.style.cssText='position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1e2845;color:#f0f4ff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:600;z-index:9999;transition:opacity 0.3s;border:1px solid rgba(59,130,246,0.3)'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.style.background = tipo==='erro' ? 'rgba(220,38,38,0.9)' : tipo==='ok' ? 'rgba(5,150,105,0.9)' : 'rgba(30,40,69,0.95)';
+  t.style.opacity='1';
+  setTimeout(()=>{ t.style.opacity='0'; }, 3000);
+}
+
+// Atualiza UI com dados do usuário
+function atualizarUI(){
+  if(!USER) return;
+  // Nome e pontos no header
+  const pts = document.querySelector('.home-logo');
+  if(pts) pts.textContent = `GUIO · ${USER.pontos||0}pts`;
+  // Missão surpresa com pontos
+  const surp = document.querySelector('.surprise-sub');
+  if(surp) surp.textContent = `${USER.checkins||0} check-ins realizados`;
+}
+
+// LOGIN REAL
+async function fazerLogin(email, senha){
+  try {
+    const r = await fetch(`${API}/token`, {
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:`username=${encodeURIComponent(email)}&password=${encodeURIComponent(senha)}`
+    });
+    if(!r.ok){ toast('Email ou senha inválidos','erro'); return; }
+    const data = await r.json();
+    TOKEN = data.access_token;
+    localStorage.setItem('guio_token', TOKEN);
+    // Buscar perfil
+    const rp = await fetch(`${API}/perfil`, { headers:{Authorization:`Bearer ${TOKEN}`} });
+    USER = await rp.json();
+    localStorage.setItem('guio_user', JSON.stringify(USER));
+    toast(`Bem-vindo, ${USER.nome}! 🎉`, 'ok');
+    goHome();
+    atualizarUI();
+    carregarRanking();
+  } catch(e){ toast('Erro de conexão','erro'); }
+}
+
+// CADASTRO REAL
+async function fazerCadastro(nome, email, senha){
+  try {
+    const r = await fetch(`${API}/usuarios`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({nome, email, senha})
+    });
+    if(!r.ok){ const e=await r.json(); toast(e.detail||'Erro no cadastro','erro'); return; }
+    toast('Conta criada! Fazendo login...','ok');
+    await fazerLogin(email, senha);
+  } catch(e){ toast('Erro de conexão','erro'); }
+}
+
+// CHECK-IN REAL COM GPS
+async function fazerCheckin(qr_code){
+  if(!TOKEN){ toast('Faça login primeiro','erro'); return; }
+  if(!navigator.geolocation){ toast('GPS não disponível','erro'); return; }
+  toast('Obtendo localização GPS...');
+  navigator.geolocation.getCurrentPosition(async pos => {
+    try {
+      const r = await fetch(`${API}/checkin`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json', Authorization:`Bearer ${TOKEN}`},
+        body: JSON.stringify({ qr_code, lat: pos.coords.latitude, lng: pos.coords.longitude })
+      });
+      const data = await r.json();
+      if(!r.ok){ toast(data.detail||'Check-in falhou','erro'); return; }
+      toast(`+${data.pontos_ganhos}pts! ${data.mensagem}`, 'ok');
+      USER.pontos = data.total_pontos;
+      localStorage.setItem('guio_user', JSON.stringify(USER));
+      atualizarUI();
+      carregarRanking();
+    } catch(e){ toast('Erro no check-in','erro'); }
+  }, ()=>{ toast('GPS negado. Ative a localização','erro'); });
+}
+
+// RANKING REAL
+async function carregarRanking(){
+  try {
+    const r = await fetch(`${API}/ranking`);
+    const lista = await r.json();
+    const el = document.getElementById('guio-ranking');
+    if(!el) return;
+    el.innerHTML = lista.map(u=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(30,40,69,0.5)">
+        <span style="color:${u.posicao===1?'#d97706':u.posicao===2?'#9ca3af':'#4a5880'};font-weight:700">#${u.posicao}</span>
+        <span style="flex:1;margin:0 12px;color:#f0f4ff;font-size:14px">${u.nome}</span>
+        <span style="color:#3b82f6;font-weight:700;font-size:13px">${u.pontos}pts</span>
+      </div>`).join('');
+  } catch(e){}
+}
+
+// MODAL DE LOGIN COM CAMPOS REAIS
+function abrirModalLogin(){
+  const modal = document.createElement('div');
+  modal.id = 'modal-login';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9998;display:flex;align-items:flex-end;justify-content:center';
+  modal.innerHTML = `
+    <div style="background:#0d1225;border-radius:24px 24px 0 0;padding:32px 24px;width:100%;max-width:375px;border-top:1px solid rgba(59,130,246,0.2)">
+      <div style="text-align:center;font-family:Syne,sans-serif;font-size:24px;font-weight:800;color:#f0f4ff;margin-bottom:4px">GUIO</div>
+      <div style="text-align:center;font-size:13px;color:#7b8db0;margin-bottom:24px">Entre ou crie sua conta</div>
+      <input id="ml-nome" placeholder="Seu nome (só pra cadastro)" style="display:none;width:100%;background:#121830;border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px 16px;color:#f0f4ff;font-size:15px;margin-bottom:12px;outline:none">
+      <input id="ml-email" type="email" placeholder="seu@email.com" style="width:100%;background:#121830;border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px 16px;color:#f0f4ff;font-size:15px;margin-bottom:12px;outline:none">
+      <input id="ml-senha" type="password" placeholder="Senha" style="width:100%;background:#121830;border:1px solid rgba(59,130,246,0.2);border-radius:12px;padding:14px 16px;color:#f0f4ff;font-size:15px;margin-bottom:16px;outline:none">
+      <button style="width:100%;background:#2563eb;color:#fff;border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:10px">Entrar</button>
+      <button id="btn-toggle" style="width:100%;background:transparent;color:#3b82f6;border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:12px">Criar conta grátis →</button>
+      <button style="width:100%;background:transparent;color:#4a5880;border:none;padding:8px;font-size:13px;cursor:pointer">Cancelar</button>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+let modoLogin = true;
+function toggleCadastro(){
+  modoLogin = !modoLogin;
+  document.getElementById('ml-nome').style.display = modoLogin ? 'none' : 'block';
+  document.getElementById('btn-toggle').textContent = modoLogin ? 'Criar conta grátis →' : '← Já tenho conta';
+  document.querySelector('#modal-login button').textContent = modoLogin ? 'Entrar' : 'Criar conta';
+}
+
+function submitLogin(){
+  const email = document.getElementById('ml-email').value;
+  const senha = document.getElementById('ml-senha').value;
+  if(!email||!senha){ toast('Preencha email e senha','erro'); return; }
+  if(modoLogin){ fazerLogin(email, senha); fecharModal(); }
+  else {
+    const nome = document.getElementById('ml-nome').value;
+    if(!nome){ toast('Preencha seu nome','erro'); return; }
+    fazerCadastro(nome, email, senha); fecharModal();
+  }
+}
+
+function fecharModal(){ const m=document.getElementById('modal-login'); if(m) m.remove(); }
+
+// SUBSTITUIR goHome para verificar login
+const _goHomeOriginal = goHome;
+function goHome(){
+  if(!TOKEN){ abrirModalLogin(); return; }
+  _goHomeOriginal();
+  atualizarUI();
+  carregarRanking();
+}
+
+// ADICIONAR RANKING NA TAB WALLET
+function injetarRankingNaWallet(){
+  const wallet = document.getElementById('tc-wallet');
+  if(!wallet) return;
+  const div = document.createElement('div');
+  div.style.cssText = 'padding:16px;margin:12px 16px;background:#0d1225;border-radius:16px;border:1px solid rgba(59,130,246,0.1)';
+  div.innerHTML = `
+    <div style="font-family:Syne,sans-serif;font-size:16px;font-weight:700;color:#f0f4ff;margin-bottom:12px">🏆 Ranking GUIO</div>
+    <div id="guio-ranking"><div style="color:#4a5880;font-size:13px">Carregando...</div></div>`;
+  wallet.prepend(div);
+  carregarRanking();
+}
+
+// CARREGAR MISSÕES DA API
+async function carregarMissoes(){
+  try {
+    const r = await fetch(`${API}/missoes`);
+    const data = await r.json();
+    const lista = data.missoes || [];
+    const el = document.querySelector('.missions-list');
+    if(!el || lista.length===0) return;
+    const icones = ['⚡','🎯','👥','🏆','🎁','📍'];
+    el.innerHTML = lista.map((m,i)=>`
+      <div class="mr">
+        <div class="mr-ico">${icones[i%icones.length]}</div>
+        <div class="mr-info">
+          <div class="mr-name">${m.titulo||m.title||'Missão'}</div>
+          <div class="mr-biz">${m.descricao||m.description||'Check-in · Itatiba'}</div>
+        </div>
+        <div class="mr-right">
+          <div class="mr-reward">+${m.pontos||m.points||50}pts</div>
+          <div class="mr-dist">${m.distancia ? m.distancia+'m' : 'perto'}</div>
+        </div>
+      </div>`).join('');
+  } catch(e){}
+}
+
+// INIT — forçar login
+if(TOKEN){
+  fetch(`${API}/perfil`, { headers:{Authorization:`Bearer ${TOKEN}`} })
+    .then(r=>{ if(!r.ok){ TOKEN=null; localStorage.removeItem('guio_token'); localStorage.removeItem('guio_user'); } return r.ok?r.json():null; })
+    .then(data=>{ if(data){ USER=data; localStorage.setItem('guio_user',JSON.stringify(USER)); } })
+    .catch(()=>{ TOKEN=null; localStorage.removeItem('guio_token'); });
+} else {
+  // Sem token: garantir que está na tela de login
+  document.getElementById('s-login').classList.add('active');
+  document.getElementById('s-home').classList.remove('active');
+}
+
+window.addEventListener('load', ()=>{
+  injetarRankingNaWallet();
+  carregarMissoes();
+  if(TOKEN && USER){ atualizarUI(); }
+  else {
+    document.getElementById('s-login').classList.add('active');
+    document.getElementById('s-home').classList.remove('active');
+  }
+});
+
+// CHECK-IN via surprise card
+document.addEventListener('DOMContentLoaded', ()=>{
+  const sc = document.querySelector('.surprise-card');
+  if(sc) sc.onclick = ()=>{
+    if(!TOKEN){ toast('Faça login para fazer check-in','erro'); abrirModalLogin(); return; }
+    const qr = prompt('Digite o código QR do local:');
+    if(qr) fazerCheckin(qr.toUpperCase());
+  };
+});
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  // Botões de login
+  document.querySelectorAll('.btn-primary').forEach(function(b){
+    b.addEventListener('click', function(){ abrirModalLogin(); });
+  });
+  document.querySelectorAll('.social-btn').forEach(function(b){
+    b.addEventListener('click', function(){ abrirModalLogin(); });
+  });
+  document.querySelectorAll('.btn-ghost').forEach(function(b){
+    b.addEventListener('click', function(){ abrirModalLogin(); if(typeof toggleCadastro==='function') toggleCadastro(); });
+  });
+  // Tabs
+  var tabs = ['missions','social','wallet'];
+  tabs.forEach(function(t){
+    var el = document.getElementById('tb-'+t);
+    if(el) el.addEventListener('click', function(){ switchTab(t); });
+  });
+  // Story
+  document.querySelectorAll('.story-item').forEach(function(el){
+    el.addEventListener('click', function(){ openStory(); });
+  });
+  var sx = document.querySelector('.story-x');
+  if(sx) sx.addEventListener('click', function(){ closeStory(); });
+  // Nav home
+  var navHome = document.querySelector('.nav-item');
+  if(navHome) navHome.addEventListener('click', function(){ goLogin(); });
+  // Surprise card
+  var sc = document.querySelector('.surprise-card');
+  if(sc) sc.addEventListener('click', function(){
+    if(!TOKEN){ abrirModalLogin(); return; }
+    var qr = prompt('QR code:');
+    if(qr) fazerCheckin(qr.toUpperCase());
+  });
+  // Chips
+  document.querySelectorAll('.chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('.chip').forEach(function(x){ x.classList.remove('active'); });
+      c.classList.add('active');
+    });
+  });
+});
+</script>
+</body>
+</html>
