@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#020714">
+<title>GUIO — O futuro é onde você está</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020714;--bg2:#050d1f;--bg3:#081429;--card:#0a1628;
+  --border:rgba(0,162,255,0.12);--border2:rgba(0,162,255,0.25);
+  --blue:#00a2ff;--blue2:#0066cc;--blue3:#60c8ff;--cyan:#00e5ff;
+  --glow:rgba(0,162,255,0.3);--text:#e8f4ff;--text2:#7aa3cc;--text3:#3d5a7a;
+  --green:#00ff88;--amber:#ffaa00;--red:#ff4444;--purple:#8b5cf6;
+  --font:'Exo 2',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);font-family:var(--font);color:var(--text);overflow:hidden}
+.app{display:flex;height:100vh;width:100vw;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:240px;min-width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:24px 0;position:relative;z-index:10;transition:transform 0.3s}
+.sidebar::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent)}
+.sidebar-logo{padding:0 20px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.sidebar-logo img{width:38px;height:38px;object-fit:contain}
+.sidebar-logo-wrap{}
+.sidebar-logo-text{font-size:22px;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,#fff,var(--blue3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.sidebar-logo-sub{font-size:9px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;font-family:var(--mono);margin-top:2px}
+.nav-items{flex:1;padding:0 12px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;cursor:pointer;color:var(--text2);font-size:14px;font-weight:500;transition:all 0.2s;margin-bottom:4px;position:relative;border:1px solid transparent}
+.nav-item:hover{background:rgba(0,162,255,0.06);color:var(--text)}
+.nav-item.active{background:rgba(0,162,255,0.1);color:var(--blue3);border-color:var(--border2)}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--blue);border-radius:0 2px 2px 0;box-shadow:0 0 8px var(--blue)}
+.nav-icon{font-size:18px;width:22px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--blue);color:#000;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;font-family:var(--mono)}
+.sidebar-user{margin:0 12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color 0.2s}
+.sidebar-user:hover{border-color:var(--border2)}
+.user-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:13px;font-weight:600;color:var(--text)}
+.user-pts{font-size:11px;color:var(--blue3);font-family:var(--mono)}
+.user-status{margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.topbar{height:56px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;flex-shrink:0}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text);letter-spacing:0.5px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.topbar-btn{width:36px;height:36px;border-radius:10px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:border-color 0.2s}
+.topbar-btn:hover{border-color:var(--border2)}
+.gps-badge{display:flex;align-items:center;gap:6px;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);border-radius:100px;padding:5px 12px;font-size:11px;color:var(--green);font-family:var(--mono)}
+.gps-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,0.5)}50%{box-shadow:0 0 0 6px rgba(0,255,136,0)}}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;overflow-x:hidden}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-track{background:transparent}
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* SCREENS */
+.screen{display:none;padding:24px;min-height:100%}
+.screen.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;transition:border-color 0.2s}
+.card:hover{border-color:var(--border2)}
+.card-sm{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+/* STATS */
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+.stat-val{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--blue3);line-height:1}
+.stat-label{font-size:11px;color:var(--text3);margin-top:6px;text-transform:uppercase;letter-spacing:1px}
+
+/* SECTION TITLE */
+.section-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* MISSION CARD */
+.mission-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.2s;margin-bottom:10px}
+.mission-card:hover{border-color:var(--border2);transform:translateX(4px)}
+.mission-ico{width:48px;height:48px;border-radius:14px;background:rgba(0,162,255,0.1);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.mission-info{flex:1}
+.mission-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.mission-biz{font-size:12px;color:var(--text2)}
+.mission-right{text-align:right}
+.mission-pts{font-family:var(--mono);font-size:13px;color:var(--blue3);font-weight:700}
+.mission-dist{font-size:10px;color:var(--text3);margin-top:2px}
+.pill{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700;font-family:var(--mono)}
+.pill-blue{background:rgba(0,162,255,0.1);color:var(--blue3);border:1px solid rgba(0,162,255,0.2)}
+.pill-green{background:rgba(0,255,136,0.08);color:var(--green);border:1px solid rgba(0,255,136,0.2)}
+.pill-amber{background:rgba(255,170,0,0.08);color:var(--amber);border:1px solid rgba(255,170,0,0.2)}
+
+/* POST */
+.post{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;transition:border-color 0.2s}
+.post:hover{border-color:var(--border2)}
+.post-head{padding:14px 16px 10px;display:flex;align-items:center;gap:10px}
+.post-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid var(--border2)}
+.post-name{font-size:14px;font-weight:600;color:var(--text)}
+.post-meta{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.post-place{margin:0 14px 10px;background:var(--bg3);border-radius:12px;padding:14px;border:1px solid var(--border)}
+.post-place-name{font-size:14px;font-weight:600;color:var(--text)}
+.post-place-addr{font-size:11px;color:var(--text2);margin-top:2px}
+.post-place-reward{font-size:12px;color:var(--green);font-weight:600;margin-top:6px;font-family:var(--mono)}
+.post-caption{padding:0 16px 10px;font-size:13px;color:var(--text2);line-height:1.6}
+.post-actions{padding:10px 16px 14px;display:flex;align-items:center;gap:16px;border-top:1px solid var(--border)}
+.act-btn{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:var(--font);transition:color 0.15s;padding:4px 8px;border-radius:8px}
+.act-btn:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.act-btn.liked{color:var(--red)}
+.rating-stars{display:flex;gap:2px}
+.star{font-size:14px;cursor:pointer;color:var(--text3);transition:color 0.15s}
+.star.active{color:var(--amber)}
+
+/* PROFILE */
+.profile-header{background:linear-gradient(135deg,var(--bg3),var(--card));border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden}
+.profile-header::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,162,255,0.1),transparent 70%)}
+.profile-av-wrap{position:relative;display:inline-block;margin-bottom:14px}
+.profile-av{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;border:3px solid var(--border2)}
+.profile-level{position:absolute;bottom:-4px;right:-4px;background:var(--amber);color:#000;font-size:9px;font-weight:700;padding:2px 6px;border-radius:100px;font-family:var(--mono)}
+.profile-name{font-size:22px;font-weight:700;color:var(--text)}
+.profile-tag{font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:2px}
+.profile-stats{display:flex;gap:24px;margin-top:16px}
+.pstat{text-align:center}
+.pstat-val{font-size:18px;font-weight:700;color:var(--blue3);font-family:var(--mono)}
+.pstat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.follow-btn{margin-left:auto;padding:8px 20px;background:var(--blue);color:#000;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:opacity 0.2s}
+.follow-btn:hover{opacity:0.85}
+.follow-btn.following{background:transparent;color:var(--blue3);border:1px solid var(--border2)}
+
+/* BADGE */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:12px}
+.badge-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;transition:border-color 0.2s}
+.badge-item:hover{border-color:var(--border2)}
+.badge-ico{font-size:28px;margin-bottom:6px}
+.badge-name{font-size:10px;color:var(--text2);font-weight:600}
+.badge-item.locked{opacity:0.4}
+
+/* COMERCIO */
+.comercio-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;display:flex;gap:16px;cursor:pointer;transition:border-color 0.2s}
+.comercio-card:hover{border-color:var(--border2)}
+.comercio-ico{width:56px;height:56px;border-radius:14px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;border:1px solid var(--border)}
+.comercio-info{flex:1}
+.comercio-name{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px}
+.comercio-addr{font-size:12px;color:var(--text2);margin-bottom:6px}
+.comercio-rating{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--amber)}
+.comercio-qr{font-family:var(--mono);font-size:12px;color:var(--blue3);background:rgba(0,162,255,0.08);padding:4px 10px;border-radius:6px;border:1px solid var(--border2);margin-left:auto;align-self:flex-start}
+
+/* FORM */
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:0.5px;margin-bottom:6px;display:block}
+.form-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:var(--font);outline:none;transition:border-color 0.2s}
+.form-input:focus{border-color:var(--border2)}
+.form-input::placeholder{color:var(--text3)}
+.form-select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;font-family:var(--font);outline:none;cursor:pointer}
+.btn{padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all 0.2s;border:none}
+.btn-primary{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;box-shadow:0 4px 20px rgba(0,162,255,0.3)}
+.btn-primary:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--blue3);border:1px solid var(--border2)}
+.btn-ghost:hover{background:rgba(0,162,255,0.08)}
+.btn-danger{background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.2)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:28px;width:100%;max-width:460px;position:relative}
+.modal-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);font-size:16px}
+
+/* MOBILE NAV */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:100}
+.mobile-nav-items{display:flex;justify-content:space-around}
+.mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;cursor:pointer;color:var(--text3);transition:color 0.2s}
+.mobile-nav-item.active{color:var(--blue3)}
+.mobile-nav-ico{font-size:20px}
+.mobile-nav-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.mobile-menu-btn{display:none;position:fixed;top:12px;left:12px;z-index:200;width:36px;height:36px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;align-items:center;justify-content:center;cursor:pointer;font-size:18px}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);z-index:150}
+  .sidebar.open{transform:translateX(0)}
+  .mobile-nav{display:block}
+  .mobile-menu-btn{display:flex}
+  .main{width:100vw}
+  .grid2,.grid3,.grid4{grid-template-columns:1fr}
+  .screen{padding:16px;padding-bottom:80px}
+  .topbar{padding:0 16px}
+  .profile-stats{gap:16px}
+}
+
+/* TOAST */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:100px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
+
+/* LOADING */
+.skeleton{background:linear-gradient(90deg,var(--card) 25%,var(--bg3) 50%,var(--card) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* SCAN QR BUTTON */
+.qr-fab{position:fixed;bottom:90px;right:20px;width:56px;height:56px;background:linear-gradient(135deg,var(--blue2),var(--blue));border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;box-shadow:0 4px 20px rgba(0,162,255,0.4);z-index:50;transition:transform 0.2s}
+.qr-fab:hover{transform:scale(1.05)}
+</style>
+</head>
+<body>
+
+<!-- MOBILE MENU BTN -->
+<div class="mobile-menu-btn" id="menuBtn">☰</div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <div class="mobile-nav-items">
+    <div class="mobile-nav-item active" data-screen="missions">
+      <span class="mobile-nav-ico">⚡</span>
+      <span class="mobile-nav-lbl">Missões</span>
+    </div>
+    <div class="mobile-nav-item" data-screen="social">
+      <span class="mobile-nav-ico">👥</span>
+      <span class="mobile-nav-lbl">Social</span>
+    </div>
+    <div class="mobile-nav-item" data-screen="comercios">
+      <span class="mobile-nav-ico">🏪</span>
+      <span class="mobile-nav-lbl">Comércios</span>
+    </div>
+    <div class="mobile-nav-item" data-screen="perfil">
+      <span class="mobile-nav-ico">👤</span>
+      <span class="mobile-nav-lbl">Perfil</span>
+    </div>
+  </div>
+</div>
+
+<!-- QR FAB -->
+<div class="qr-fab" id="qrFab" title="Check-in QR">📷</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://raw.githubusercontent.com/RobsonViieira/Guio--web/main/logo.png.webp" alt="GUIO">
+      <div class="sidebar-logo-wrap">
+        <div class="sidebar-logo-text">GUIO</div>
+        <div class="sidebar-logo-sub">v2.0 · Itatiba SP</div>
+      </div>
+    </div>
+    <div class="nav-items">
+      <div class="nav-item active" data-screen="missions">
+        <span class="nav-icon">⚡</span> Missões
+        <span class="nav-badge" id="badge-missions">3</span>
+      </div>
+      <div class="nav-item" data-screen="social">
+        <span class="nav-icon">👥</span> Social
+      </div>
+      <div class="nav-item" data-screen="comercios">
+        <span class="nav-icon">🏪</span> Comércios
+      </div>
+      <div class="nav-item" data-screen="perfil">
+        <span class="nav-icon">👤</span> Perfil
+      </div>
+      <div class="nav-item" data-screen="cadastrar-comercio" style="margin-top:8px;border-top:1px solid var(--border);padding-top:12px">
+        <span class="nav-icon">➕</span> Cadastrar Comércio
+      </div>
+    </div>
+    <div class="sidebar-user" id="sidebarUser">
+      <div class="user-av" id="sidebarAv">R</div>
+      <div>
+        <div class="user-name" id="sidebarName">Robson V.</div>
+        <div class="user-pts" id="sidebarPts">0 pts</div>
+      </div>
+      <div class="user-status"></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbarTitle">Missões</div>
+      <div class="topbar-right">
+        <div class="gps-badge">
+          <div class="gps-dot"></div>
+          <span>GPS · Itatiba</span>
+        </div>
+        <div class="topbar-btn" id="btnLogin" title="Login">🔑</div>
+        <div class="topbar-btn" title="Notificações">🔔</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- ══ MISSÕES ══ -->
+      <div class="screen active" id="screen-missions">
+        <div class="grid4" style="margin-bottom:24px">
+          <div class="stat-card">
+            <div class="stat-val" id="stat-checkins">0</div>
+            <div class="stat-label">Check-ins</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="stat-pts">0</div>
+            <div class="stat-label">Pontos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="stat-rank">#—</div>
+            <div class="stat-label">Ranking</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val">3</div>
+            <div class="stat-label">Ativas</div>
+          </div>
+        </div>
+
+        <div class="section-title">Missões disponíveis</div>
+        <div id="missions-list">
+          <div class="mission-card">
+            <div class="mission-ico">☕</div>
+            <div class="mission-info">
+              <div class="mission-name">Traga um Amigo</div>
+              <div class="mission-biz">Café do Centro · Itatiba</div>
+              <div style="display:flex;gap:6px;margin-top:6px">
+                <span class="pill pill-green">café grátis</span>
+                <span class="pill pill-blue">dupla</span>
+              </div>
+            </div>
+            <div class="mission-right">
+              <div class="mission-pts">+150pts</div>
+              <div class="mission-dist">120m</div>
+            </div>
+          </div>
+          <div class="mission-card">
+            <div class="mission-ico">💈</div>
+            <div class="mission-info">
+              <div class="mission-name">Check-in Express</div>
+              <div class="mission-biz">Barbearia do Zé · Itatiba</div>
+              <div style="display:flex;gap:6px;margin-top:6px">
+                <span class="pill pill-blue">+200pts</span>
+              </div>
+            </div>
+            <div class="mission-right">
+              <div class="mission-pts">+200pts</div>
+              <div class="mission-dist">340m</div>
+            </div>
+          </div>
+          <div class="mission-card">
+            <div class="mission-ico">🍕</div>
+            <div class="mission-info">
+              <div class="mission-name">Almoço Especial</div>
+              <div class="mission-biz">Pizzaria Bella · Itatiba</div>
+              <div style="display:flex;gap:6px;margin-top:6px">
+                <span class="pill pill-amber">10% off</span>
+              </div>
+            </div>
+            <div class="mission-right">
+              <div class="mission-pts">+100pts</div>
+              <div class="mission-dist">580m</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SOCIAL ══ -->
+      <div class="screen" id="screen-social">
+        <div style="display:flex;gap:16px;margin-bottom:24px;overflow-x:auto;padding-bottom:4px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;cursor:pointer">
+            <div style="width:56px;height:56px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,var(--blue),var(--cyan))">
+              <div style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--blue));display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);font-size:14px;font-weight:700">RV</div>
+            </div>
+            <span style="font-size:10px;color:var(--text2)">Você</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;cursor:pointer">
+            <div style="width:56px;height:56px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,var(--purple),var(--blue))">
+              <div style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#4c1d95,var(--purple));display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);font-size:14px;font-weight:700">AM</div>
+            </div>
+            <span style="font-size:10px;color:var(--text2)">Ana</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;cursor:pointer">
+            <div style="width:56px;height:56px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,var(--amber),var(--green))">
+              <div style="width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#92400e,var(--amber));display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);font-size:14px;font-weight:700">CS</div>
+            </div>
+            <span style="font-size:10px;color:var(--text2)">Carlos</span>
+          </div>
+        </div>
+
+        <div id="feed-posts">
+          <div class="post">
+            <div class="post-head">
+              <div class="post-av" style="background:linear-gradient(135deg,#4c1d95,var(--purple))">AM</div>
+              <div>
+                <div class="post-name">Ana Martins</div>
+                <div class="post-meta">agora · Itatiba, SP</div>
+              </div>
+              <span class="pill pill-blue" style="margin-left:auto">dupla ✓</span>
+            </div>
+            <div class="post-place">
+              <div class="post-place-name">☕ Café do Centro</div>
+              <div class="post-place-addr">Rua XV de Novembro, 42 · Itatiba</div>
+              <div class="post-place-reward">✓ café grátis resgatado · +150pts</div>
+            </div>
+            <div class="post-caption">Missão <strong style="color:var(--blue3)">Traga um Amigo</strong> completa com o Carlos! ☕🔥</div>
+            <div style="padding:8px 16px 10px;display:flex;gap:6px">
+              <span class="pill pill-blue">☕ Café</span>
+              <span class="pill pill-green">GPS verificado</span>
+            </div>
+            <div class="post-actions">
+              <button class="act-btn" id="like1">❤️ <span id="likes1">24</span></button>
+              <button class="act-btn" id="comment-btn1">💬 3</button>
+              <button class="act-btn">🔗 Compartilhar</button>
+              <div style="margin-left:auto;display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text3)">
+                Avaliação:
+                <div class="rating-stars" data-comercio="cafe-centro">
+                  <span class="star active" data-val="1">★</span>
+                  <span class="star active" data-val="2">★</span>
+                  <span class="star active" data-val="3">★</span>
+                  <span class="star active" data-val="4">★</span>
+                  <span class="star" data-val="5">★</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="post">
+            <div class="post-head">
+              <div class="post-av" style="background:linear-gradient(135deg,#065f46,#059669)">JL</div>
+              <div>
+                <div class="post-name">Julia Lima</div>
+                <div class="post-meta">18 min · Itatiba, SP</div>
+              </div>
+              <span class="pill pill-green" style="margin-left:auto">verificado ✓</span>
+            </div>
+            <div class="post-place">
+              <div class="post-place-name">💈 Barbearia do Zé</div>
+              <div class="post-place-addr">Av. São João, 156 · Itatiba</div>
+              <div class="post-place-reward">✓ Check-in Express · +200pts</div>
+            </div>
+            <div class="post-caption">Melhor barbearia de Itatiba, sem dúvida ✂️</div>
+            <div class="post-actions">
+              <button class="act-btn" id="like2">❤️ <span id="likes2">11</span></button>
+              <button class="act-btn">💬 1</button>
+              <button class="act-btn">🔗 Compartilhar</button>
+              <div style="margin-left:auto;display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text3)">
+                <div class="rating-stars">
+                  <span class="star active">★</span>
+                  <span class="star active">★</span>
+                  <span class="star active">★</span>
+                  <span class="star active">★</span>
+                  <span class="star active">★</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ COMÉRCIOS ══ -->
+      <div class="screen" id="screen-comercios">
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+          <input type="text" class="form-input" placeholder="🔍 Buscar comércio..." style="flex:1;min-width:200px" id="busca-comercio">
+          <select class="form-select" style="width:160px">
+            <option>Todos</option>
+            <option>Alimentação</option>
+            <option>Beleza</option>
+            <option>Saúde</option>
+            <option>Academia</option>
+          </select>
+        </div>
+
+        <div class="section-title">Parceiros ativos</div>
+        <div id="comercios-list">
+          <div class="comercio-card">
+            <div class="comercio-ico">☕</div>
+            <div class="comercio-info">
+              <div class="comercio-name">Café do Centro</div>
+              <div class="comercio-addr">Rua XV de Novembro, 42 · Itatiba</div>
+              <div class="comercio-rating">
+                ★★★★☆ <span style="color:var(--text3);font-size:11px">(47 avaliações)</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:8px">
+                <span class="pill pill-green">café grátis</span>
+                <span class="pill pill-blue">dupla</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+              <div class="comercio-qr">2B0166BD</div>
+              <button class="btn btn-primary" style="padding:8px 14px;font-size:12px" onclick="iniciarCheckin('2B0166BD')">Check-in</button>
+            </div>
+          </div>
+          <div class="comercio-card">
+            <div class="comercio-ico">💈</div>
+            <div class="comercio-info">
+              <div class="comercio-name">Barbearia do Zé</div>
+              <div class="comercio-addr">Av. São João, 156 · Itatiba</div>
+              <div class="comercio-rating">
+                ★★★★★ <span style="color:var(--text3);font-size:11px">(23 avaliações)</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:8px">
+                <span class="pill pill-blue">+200pts</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+              <div class="comercio-qr">A1B2C3D4</div>
+              <button class="btn btn-primary" style="padding:8px 14px;font-size:12px" onclick="iniciarCheckin('A1B2C3D4')">Check-in</button>
+            </div>
+          </div>
+          <div class="comercio-card">
+            <div class="comercio-ico">🍕</div>
+            <div class="comercio-info">
+              <div class="comercio-name">Pizzaria Bella</div>
+              <div class="comercio-addr">Rua das Flores, 89 · Itatiba</div>
+              <div class="comercio-rating">
+                ★★★★☆ <span style="color:var(--text3);font-size:11px">(31 avaliações)</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:8px">
+                <span class="pill pill-amber">10% off</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+              <div class="comercio-qr">X9Y8Z7W6</div>
+              <button class="btn btn-primary" style="padding:8px 14px;font-size:12px" onclick="iniciarCheckin('X9Y8Z7W6')">Check-in</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PERFIL ══ -->
+      <div class="screen" id="screen-perfil">
+        <div class="profile-header">
+          <div style="display:flex;align-items:flex-start;gap:16px">
+            <div class="profile-av-wrap">
+              <div class="profile-av" id="perfil-av">R</div>
+              <div class="profile-level">LV 3</div>
+            </div>
+            <div style="flex:1">
+              <div class="profile-name" id="perfil-name">Robson Vieira</div>
+              <div class="profile-tag" id="perfil-tag">@robsonv · Itatiba, SP</div>
+              <div class="profile-stats">
+                <div class="pstat">
+                  <div class="pstat-val" id="perfil-pts">0</div>
+                  <div class="pstat-label">Pontos</div>
+                </div>
+                <div class="pstat">
+                  <div class="pstat-val" id="perfil-checkins">0</div>
+                  <div class="pstat-label">Check-ins</div>
+                </div>
+                <div class="pstat">
+                  <div class="pstat-val">12</div>
+                  <div class="pstat-label">Seguindo</div>
+                </div>
+                <div class="pstat">
+                  <div class="pstat-val">8</div>
+                  <div class="pstat-label">Seguidores</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">Badges conquistados</div>
+        <div class="badge-grid" style="margin-bottom:24px">
+          <div class="badge-item">
+            <div class="badge-ico">⚡</div>
+            <div class="badge-name">Primeiro Check-in</div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-ico">🗺️</div>
+            <div class="badge-name">Explorador</div>
+          </div>
+          <div class="badge-item">
+            <div class="badge-ico">👥</div>
+            <div class="badge-name">Social</div>
+          </div>
+          <div class="badge-item locked">
+            <div class="badge-ico">🏆</div>
+            <div class="badge-name">Top 10</div>
+          </div>
+          <div class="badge-item locked">
+            <div class="badge-ico">💎</div>
+            <div class="badge-name">100 Check-ins</div>
+          </div>
+          <div class="badge-item locked">
+            <div class="badge-ico">🚀</div>
+            <div class="badge-name">Fundador</div>
+          </div>
+        </div>
+
+        <div class="section-title">Ranking GUIO</div>
+        <div id="ranking-list" class="card">
+          <div style="color:var(--text3);font-size:13px;text-align:center;padding:12px">Carregando...</div>
+        </div>
+      </div>
+
+      <!-- ══ CADASTRAR COMÉRCIO ══ -->
+      <div class="screen" id="screen-cadastrar-comercio">
+        <div class="card" style="max-width:600px">
+          <div style="margin-bottom:24px">
+            <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px">Cadastrar Comércio Parceiro</div>
+            <div style="font-size:13px;color:var(--text2)">Preencha os dados do seu estabelecimento. Após aprovação, você receberá o QR code exclusivo.</div>
+          </div>
+
+          <div class="grid2">
+            <div class="form-group">
+              <label class="form-label">Nome do Estabelecimento *</label>
+              <input type="text" class="form-input" placeholder="Ex: Café do Centro" id="c-nome">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Categoria *</label>
+              <select class="form-select" id="c-categoria">
+                <option value="">Selecione...</option>
+                <option>Alimentação</option>
+                <option>Beleza e Estética</option>
+                <option>Academia e Saúde</option>
+                <option>Moda e Vestuário</option>
+                <option>Serviços</option>
+                <option>Entretenimento</option>
+                <option>Outro</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Endereço Completo *</label>
+            <input type="text" class="form-input" placeholder="Rua, número, bairro · Itatiba, SP" id="c-endereco">
+          </div>
+
+          <div class="grid2">
+            <div class="form-group">
+              <label class="form-label">Telefone / WhatsApp *</label>
+              <input type="tel" class="form-input" placeholder="(11) 99999-9999" id="c-telefone">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email de contato *</label>
+              <input type="email" class="form-input" placeholder="contato@seucomercio.com" id="c-email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Recompensa oferecida *</label>
+            <input type="text" class="form-input" placeholder="Ex: 10% desconto, café grátis, brinde especial..." id="c-recompensa">
+          </div>
+
+          <div class="grid2">
+            <div class="form-group">
+              <label class="form-label">Pontos por check-in</label>
+              <input type="number" class="form-input" placeholder="50" value="50" id="c-pontos" min="10" max="500">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Raio de verificação (metros)</label>
+              <input type="number" class="form-input" placeholder="100" value="100" id="c-raio" min="10" max="500">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Descrição do estabelecimento</label>
+            <textarea class="form-input" rows="3" placeholder="Fale um pouco sobre seu negócio..." id="c-descricao" style="resize:vertical"></textarea>
+          </div>
+
+          <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px">
+            <button class="btn btn-ghost" onclick="navigate('missions')">Cancelar</button>
+            <button class="btn btn-primary" id="btn-cadastrar-comercio">Enviar Cadastro →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LOGIN -->
+<div class="modal-overlay" id="modalLogin">
+  <div class="modal">
+    <div class="modal-close" id="closeLogin">✕</div>
+    <img src="https://raw.githubusercontent.com/RobsonViieira/Guio--web/main/logo.png.webp" style="width:40px;margin-bottom:12px">
+    <div class="modal-title" id="modal-login-title">Entrar no GUIO</div>
+    <div class="modal-sub" id="modal-login-sub">Acesse sua conta para fazer check-ins e acumular pontos</div>
+
+    <div id="campo-nome-modal" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Seu nome</label>
+        <input type="text" class="form-input" placeholder="Nome completo" id="ml-nome">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" placeholder="seu@email.com" id="ml-email">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Senha</label>
+      <input type="password" class="form-input" placeholder="••••••••" id="ml-senha">
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;margin-bottom:10px" id="btn-submit-login">Entrar</button>
+    <button class="btn btn-ghost" style="width:100%" id="btn-toggle-login">Criar conta grátis →</button>
+  </div>
+</div>
+
+<!-- MODAL CHECK-IN -->
+<div class="modal-overlay" id="modalCheckin">
+  <div class="modal">
+    <div class="modal-close" id="closeCheckin">✕</div>
+    <div class="modal-title">Check-in QR</div>
+    <div class="modal-sub">Digite o código QR do estabelecimento</div>
+    <div class="form-group">
+      <label class="form-label">Código QR</label>
+      <input type="text" class="form-input" placeholder="Ex: 2B0166BD" id="qr-input" style="font-family:var(--mono);text-transform:uppercase;letter-spacing:2px">
+    </div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:16px;font-family:var(--mono)">
+      ℹ️ Seu GPS será verificado automaticamente
+    </div>
+    <button class="btn btn-primary" style="width:100%" id="btn-fazer-checkin">Verificar Presença ⚡</button>
+  </div>
+</div>
+
+<script>
+const API = '/api';
+let TOKEN = localStorage.getItem('guio_token') || null;
+let USER = JSON.parse(localStorage.getItem('guio_user') || 'null');
+let modoLogin = true;
+
+// ── TOAST ──
+function toast(msg, tipo){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = tipo==='erro' ? 'rgba(255,68,68,0.95)' : tipo==='ok' ? 'rgba(0,255,136,0.15)' : 'rgba(10,22,40,0.95)';
+  t.style.color = tipo==='ok' ? 'var(--green)' : '#fff';
+  t.style.border = tipo==='ok' ? '1px solid rgba(0,255,136,0.3)' : '1px solid rgba(0,162,255,0.3)';
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>{ t.style.opacity='0'; }, 3000);
+}
+
+// ── NAVEGAÇÃO ──
+const screens = {
+  missions: 'Missões', social: 'Social', comercios: 'Comércios',
+  perfil: 'Perfil', 'cadastrar-comercio': 'Cadastrar Comércio'
+};
+
+function navigate(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-item').forEach(n => n.classList.remove('active'));
+
+  const sc = document.getElementById('screen-' + id);
+  if(sc) sc.classList.add('active');
+
+  document.querySelectorAll('[data-screen="' + id + '"]').forEach(n => n.classList.add('active'));
+  document.getElementById('topbarTitle').textContent = screens[id] || id;
+
+  if(id === 'perfil') carregarPerfil();
+  if(id === 'social') carregarFeed();
+
+  // fechar sidebar mobile
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+// ── AUTH ──
+async function fazerLogin(email, senha){
+  try {
+    toast('Autenticando...');
+    const r = await fetch(API + '/token', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: 'username=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(senha)
+    });
+    if(!r.ok){ toast('Email ou senha inválidos', 'erro'); return false; }
+    const data = await r.json();
+    TOKEN = data.access_token;
+    localStorage.setItem('guio_token', TOKEN);
+    const rp = await fetch(API + '/perfil', {headers:{Authorization:'Bearer ' + TOKEN}});
+    USER = await rp.json();
+    localStorage.setItem('guio_user', JSON.stringify(USER));
+    atualizarUI();
+    toast('Bem-vindo, ' + USER.nome + '! ⚡', 'ok');
+    return true;
+  } catch(e){ toast('Erro de conexão', 'erro'); return false; }
+}
+
+async function fazerCadastro(nome, email, senha){
+  try {
+    toast('Criando conta...');
+    const r = await fetch(API + '/usuarios', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({nome, email, senha})
+    });
+    if(!r.ok){ const e=await r.json(); toast(e.detail||'Erro no cadastro', 'erro'); return false; }
+    return await fazerLogin(email, senha);
+  } catch(e){ toast('Erro de conexão', 'erro'); return false; }
+}
+
+function logout(){
+  TOKEN = null; USER = null;
+  localStorage.removeItem('guio_token');
+  localStorage.removeItem('guio_user');
+  atualizarUI();
+  toast('Sessão encerrada');
+}
+
+// ── UI UPDATE ──
+function atualizarUI(){
+  if(USER){
+    document.getElementById('sidebarName').textContent = USER.nome;
+    document.getElementById('sidebarPts').textContent = (USER.pontos||0) + ' pts';
+    document.getElementById('sidebarAv').textContent = (USER.nome||'?')[0].toUpperCase();
+    document.getElementById('stat-pts').textContent = USER.pontos||0;
+    document.getElementById('stat-checkins').textContent = USER.checkins||0;
+    document.getElementById('btnLogin').textContent = '🚪';
+    document.getElementById('btnLogin').title = 'Sair';
+  } else {
+    document.getElementById('sidebarName').textContent = 'Visitante';
+    document.getElementById('sidebarPts').textContent = '0 pts';
+    document.getElementById('sidebarAv').textContent = '?';
+    document.getElementById('btnLogin').textContent = '🔑';
+    document.getElementById('btnLogin').title = 'Entrar';
+  }
+}
+
+// ── MODAL LOGIN ──
+function abrirModalLogin(cadastro){
+  modoLogin = !cadastro;
+  document.getElementById('campo-nome-modal').style.display = cadastro ? 'block' : 'none';
+  document.getElementById('modal-login-title').textContent = cadastro ? 'Criar conta GUIO' : 'Entrar no GUIO';
+  document.getElementById('modal-login-sub').textContent = cadastro ? 'Junte-se à comunidade GUIO' : 'Acesse sua conta para fazer check-ins';
+  document.getElementById('btn-submit-login').textContent = cadastro ? 'Criar conta' : 'Entrar';
+  document.getElementById('btn-toggle-login').textContent = cadastro ? '← Já tenho conta' : 'Criar conta grátis →';
+  document.getElementById('modalLogin').classList.add('open');
+}
+
+function fecharModalLogin(){
+  document.getElementById('modalLogin').classList.remove('open');
+}
+
+// ── CHECK-IN ──
+function iniciarCheckin(qr){
+  if(!TOKEN){ abrirModalLogin(false); toast('Faça login para fazer check-in', 'erro'); return; }
+  if(qr){
+    document.getElementById('qr-input').value = qr;
+  }
+  document.getElementById('modalCheckin').classList.add('open');
+}
+
+async function fazerCheckin(qrCode){
+  if(!TOKEN){ toast('Faça login primeiro', 'erro'); return; }
+  if(!navigator.geolocation){ toast('GPS não disponível', 'erro'); return; }
+  toast('Verificando sua localização GPS...');
+  navigator.geolocation.getCurrentPosition(async pos => {
+    try {
+      const r = await fetch(API + '/checkin', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json', Authorization:'Bearer ' + TOKEN},
+        body: JSON.stringify({qr_code: qrCode, lat: pos.coords.latitude, lng: pos.coords.longitude})
+      });
+      const data = await r.json();
+      if(!r.ok){ toast(data.detail||'Check-in falhou', 'erro'); return; }
+      toast('+' + data.pontos_ganhos + 'pts! ' + data.mensagem, 'ok');
+      USER.pontos = data.total_pontos;
+      localStorage.setItem('guio_user', JSON.stringify(USER));
+      atualizarUI();
+      document.getElementById('modalCheckin').classList.remove('open');
+      carregarRanking();
+    } catch(e){ toast('Erro no check-in', 'erro'); }
+  }, ()=>{ toast('GPS negado. Ative a localização', 'erro'); });
+}
+
+// ── RANKING ──
+async function carregarRanking(){
+  try {
+    const r = await fetch(API + '/ranking');
+    const lista = await r.json();
+    const el = document.getElementById('ranking-list');
+    el.innerHTML = lista.map((u,i) =>
+      '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">' +
+      '<span style="font-family:var(--mono);font-size:13px;font-weight:700;color:' + (i===0?'var(--amber)':i===1?'var(--text2)':'var(--text3)') + ';width:28px">#' + u.posicao + '</span>' +
+      '<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">' + u.nome[0].toUpperCase() + '</div>' +
+      '<span style="flex:1;font-size:14px;color:var(--text)">' + u.nome + '</span>' +
+      '<span style="font-family:var(--mono);font-size:13px;color:var(--blue3);font-weight:700">' + u.pontos + 'pts</span>' +
+      '</div>'
+    ).join('');
+
+    // Atualizar ranking do usuário
+    if(USER){
+      const myRank = lista.find(u => u.nome === USER.nome);
+      if(myRank) document.getElementById('stat-rank').textContent = '#' + myRank.posicao;
+    }
+  } catch(e){}
+}
+
+// ── PERFIL ──
+async function carregarPerfil(){
+  if(!USER) return;
+  document.getElementById('perfil-av').textContent = USER.nome[0].toUpperCase();
+  document.getElementById('perfil-name').textContent = USER.nome;
+  document.getElementById('perfil-pts').textContent = USER.pontos||0;
+  document.getElementById('perfil-checkins').textContent = USER.checkins||0;
+  carregarRanking();
+}
+
+// ── FEED ──
+async function carregarFeed(){
+  // Feed estático por ora — será dinâmico quando backend implementar posts
+}
+
+// ── CADASTRO COMÉRCIO ──
+async function cadastrarComercio(){
+  const nome = document.getElementById('c-nome').value.trim();
+  const categoria = document.getElementById('c-categoria').value;
+  const endereco = document.getElementById('c-endereco').value.trim();
+  const telefone = document.getElementById('c-telefone').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const recompensa = document.getElementById('c-recompensa').value.trim();
+  const pontos = parseInt(document.getElementById('c-pontos').value) || 50;
+  const raio = parseInt(document.getElementById('c-raio').value) || 100;
+
+  if(!nome||!categoria||!endereco||!telefone||!email||!recompensa){
+    toast('Preencha todos os campos obrigatórios', 'erro'); return;
+  }
+
+  // Por ora simula cadastro — integrar com endpoint /locais
+  toast('Cadastro enviado! Aguarde aprovação em até 24h ⚡', 'ok');
+  setTimeout(()=> navigate('comercios'), 2000);
+}
+
+// ── EVENTS ──
+document.addEventListener('DOMContentLoaded', function(){
+  // Navegação sidebar
+  document.querySelectorAll('.nav-item[data-screen]').forEach(item => {
+    item.addEventListener('click', function(){ navigate(this.dataset.screen); });
+  });
+
+  // Navegação mobile
+  document.querySelectorAll('.mobile-nav-item[data-screen]').forEach(item => {
+    item.addEventListener('click', function(){ navigate(this.dataset.screen); });
+  });
+
+  // Menu mobile
+  document.getElementById('menuBtn').addEventListener('click', function(){
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  // Login btn topbar
+  document.getElementById('btnLogin').addEventListener('click', function(){
+    if(TOKEN) logout(); else abrirModalLogin(false);
+  });
+
+  // Modal login
+  document.getElementById('closeLogin').addEventListener('click', fecharModalLogin);
+  document.getElementById('btn-toggle-login').addEventListener('click', function(){
+    modoLogin = !modoLogin;
+    abrirModalLogin(!modoLogin);
+  });
+  document.getElementById('btn-submit-login').addEventListener('click', async function(){
+    const email = document.getElementById('ml-email').value.trim();
+    const senha = document.getElementById('ml-senha').value;
+    if(!email||!senha){ toast('Preencha email e senha', 'erro'); return; }
+    let ok;
+    if(modoLogin){
+      ok = await fazerLogin(email, senha);
+    } else {
+      const nome = document.getElementById('ml-nome').value.trim();
+      if(!nome){ toast('Preencha seu nome', 'erro'); return; }
+      ok = await fazerCadastro(nome, email, senha);
+    }
+    if(ok) fecharModalLogin();
+  });
+  document.getElementById('ml-senha').addEventListener('keypress', function(e){
+    if(e.key==='Enter') document.getElementById('btn-submit-login').click();
+  });
+
+  // Fechar modal clicando fora
+  document.getElementById('modalLogin').addEventListener('click', function(e){
+    if(e.target === this) fecharModalLogin();
+  });
+
+  // QR FAB
+  document.getElementById('qrFab').addEventListener('click', function(){
+    iniciarCheckin('');
+  });
+
+  // Modal check-in
+  document.getElementById('closeCheckin').addEventListener('click', function(){
+    document.getElementById('modalCheckin').classList.remove('open');
+  });
+  document.getElementById('btn-fazer-checkin').addEventListener('click', function(){
+    const qr = document.getElementById('qr-input').value.trim().toUpperCase();
+    if(!qr){ toast('Digite o código QR', 'erro'); return; }
+    fazerCheckin(qr);
+  });
+  document.getElementById('qr-input').addEventListener('input', function(){
+    this.value = this.value.toUpperCase();
+  });
+
+  // Cadastro comércio
+  document.getElementById('btn-cadastrar-comercio').addEventListener('click', cadastrarComercio);
+
+  // Likes
+  document.getElementById('like1').addEventListener('click', function(){
+    this.classList.toggle('liked');
+    const n = document.getElementById('likes1');
+    n.textContent = this.classList.contains('liked') ? parseInt(n.textContent)+1 : parseInt(n.textContent)-1;
+  });
+  document.getElementById('like2').addEventListener('click', function(){
+    this.classList.toggle('liked');
+    const n = document.getElementById('likes2');
+    n.textContent = this.classList.contains('liked') ? parseInt(n.textContent)+1 : parseInt(n.textContent)-1;
+  });
+
+  // Rating stars
+  document.querySelectorAll('.rating-stars').forEach(container => {
+    container.querySelectorAll('.star').forEach(star => {
+      star.addEventListener('click', function(){
+        const val = parseInt(this.dataset.val);
+        container.querySelectorAll('.star').forEach((s,i) => {
+          s.classList.toggle('active', i < val);
+        });
+        toast('Avaliação registrada! ⭐', 'ok');
+      });
+    });
+  });
+
+  // Busca comércio
+  document.getElementById('busca-comercio').addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    document.querySelectorAll('.comercio-card').forEach(card => {
+      const nome = card.querySelector('.comercio-name').textContent.toLowerCase();
+      card.style.display = nome.includes(q) ? 'flex' : 'none';
+    });
+  });
+
+  // Verificar token
+  if(TOKEN){
+    fetch(API + '/perfil', {headers:{Authorization:'Bearer ' + TOKEN}})
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if(data){ USER = data; localStorage.setItem('guio_user', JSON.stringify(USER)); atualizarUI(); carregarRanking(); }
+        else { TOKEN = null; localStorage.removeItem('guio_token'); }
+      })
+      .catch(()=>{ TOKEN = null; localStorage.removeItem('guio_token'); });
+  }
+
+  carregarRanking();
+});
+</script>
+</body>
+</html>
